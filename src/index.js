@@ -1,4 +1,5 @@
 const {Crawler} = require('./crawler');
+const {checkFooterYear} = require('./utils');
 
 const startUrls = [
   'https://www.julieandjessecook.com/',
@@ -8,12 +9,6 @@ const startUrls = [
   'https://threadexperiment.com/', 
   'https://www.deutschepost.de/sendung/login.html'
 ];
-
-
-const checkFooterYear = async (window) => {
-  const footer = window.document.querySelector('footer').textContent; 
-  console.log(`Footer ${footer}`);
-};
 
 
 const crawler = new Crawler({
