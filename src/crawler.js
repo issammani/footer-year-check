@@ -6,7 +6,7 @@ class Crawler {
 
   constructor(options = {}) {
     // Keep track of urls
-    this.queue = options.startUrls || [];
+    this.queue = new Set(options.startUrls);
 
     // Callback to call when response is received
     this.callback = options.callback ? options.callback.bind(this) : console.log;
@@ -54,7 +54,7 @@ class Crawler {
 
   // Add url to queue
   addUrl(url) {
-    this.queue.push(url);
+    this.queue.add(url);
   }
 
   // Add url array to queue
