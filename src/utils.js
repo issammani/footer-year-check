@@ -22,4 +22,4 @@ const getFooterInnerText = async (window) => {
     .map(footer => footer.textContent.replace(/\s/g,''));
 };
 
-modules.exports = {checkFooterYear};
+module.exports = {checkFooterYear};
