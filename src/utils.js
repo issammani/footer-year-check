@@ -7,7 +7,7 @@ const currentYear = new Date().getFullYear();
 
 
 // Create new write stream
-const createWriteFileStream = (prefix='footer-check', outDir='store') => {
+const createWriteStream = (prefix='footer-check', outDir='store') => {
   // Create a random hash 
   const hash = crypto.randomBytes(10).toString('hex');
 
@@ -16,9 +16,19 @@ const createWriteFileStream = (prefix='footer-check', outDir='store') => {
 
   // Kind of hacky but works for our use case
   const writeStream = fs.createWriteStream(filename,{flags: "w", encoding: "utf8"});
-  writeStream.write('{"urls":['); // Begin JSON Object
+  // Begin JSON Object
+  writeStream.write(`{"urls":[ ${JSON.stringify({url: "placeholder", years: []})}`);
   return writeStream;
 };
+
+// Close write stream
+const closeWriteStream = (writeStream) => {
+  console.log('Terminating JSON object...');
+  // Terminate JSON Object
+  writeStream.end(']}');
+  console.log('Closing stream...');
+  console.log('All done');
+}
 
 
 const checkFooterYear = async (window, writeStream) => {
@@ -41,7 +51,7 @@ const checkFooterYear = async (window, writeStream) => {
   }
 
   // Either year wasn't found or outdated
-  writeStream.write(JSON.stringify({url: window.location.href, years: [... new Set(matches.flat())]}) + ',');
+  writeStream.write(',' + JSON.stringify({url: window.location.href, years: [... new Set(matches.flat())]}));
   console.log("outdated");
 };
 
@@ -51,4 +61,4 @@ const getFooterInnerText = async (window) => {
     .map(footer => footer.textContent.replace(/\s/g,''));
 };
 
-module.exports = {checkFooterYear, createWriteFileStream};
+module.exports = {checkFooterYear, createWriteStream, closeWriteStream};

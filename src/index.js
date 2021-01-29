@@ -1,5 +1,5 @@
 const {Crawler} = require('./crawler');
-const {checkFooterYear, createWriteFileStream} = require('./utils');
+const {checkFooterYear, createWriteStream, closeWriteStream} = require('./utils');
 
 // Get seed urls to start crawler
 const startUrls = require('./seed-urls.json').urls;
@@ -7,8 +7,8 @@ const startUrls = require('./seed-urls.json').urls;
 const crawler = new Crawler({
   startUrls, 
   callback: checkFooterYear,
-  beforeRun: createWriteFileStream,
-  afterRun: () => {console.log('Saving changes to file...'); console.log('All done');}
+  beforeRun: createWriteStream,
+  afterRun: closeWriteStream,
 });
 
 crawler.run();
