@@ -1,5 +1,22 @@
+const fs = require("fs");
+const path = require('path');
+const crypto = require('crypto');
 
+// Store value of current year
 const currentYear = new Date().getFullYear();
+
+
+// Create new write stream
+const createWriteFileStream = (prefix='footer-check', destDir='store') => {
+  // Create a random hash 
+  const hash = crypto.randomBytes(10).toString('hex');
+
+  // Create filename (with absoulte path)
+  const filename = `${path.resolve(outDir)}/${prefix}-${hash}.json`;
+
+  return fs.createWriteStream(filename,{flags: "w", encoding: "utf8"});
+};
+
 
 const checkFooterYear = async (window) => {
   const yearRegex = /(19|20)\d{2}/g;
