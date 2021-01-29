@@ -29,7 +29,7 @@ class Crawler {
     // Detect SIGINT and call .afterRun
     process.on("SIGINT", () => {
       console.log('\nSIGINT detected');
-      this.afterRun(this.beforeRunReturn);
+      this.end();
       process.exit();
     });
   }
@@ -48,6 +48,14 @@ class Crawler {
       // Remove url from queue
       this.removeUrl(url);
     }
+
+    this.end();
+  }
+
+  end() {
+    // Call afterRun 
+    this.afterRun(this.beforeRunReturn);
+
   }
 
   async fetch(url) {
