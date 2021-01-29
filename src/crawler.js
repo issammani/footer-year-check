@@ -23,6 +23,8 @@ class Crawler {
       } catch(err) {
         console.warn(`${err.message}`);
       }
+      // Remove url from queue
+      this.removeUrl(url);
     }
   }
 
@@ -61,6 +63,11 @@ class Crawler {
   addUrls(urls) {
     urls.forEach(this.addUrl.bind(this));
     console.log(`Added ${urls.length} links to queue`);
+  }
+
+  // Remove url from queue
+  removeUrl(url) {
+    this.queue.delete(url);
   }
 }
 
