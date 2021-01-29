@@ -26,15 +26,22 @@ const checkFooterYear = async (window, writeStream) => {
   // const copyrightRegex = /(?:©|(?:\(c\))|(?:&copy;))/;
   // const footerYearRegex = new RegExp(`(?=.*${yearRegex.source})(?=.*${copyrightRegex.source}).+`, `im`);
   const footerContents = await getFooterInnerText(window);
-
-  for (let content of footerContents) {
-    const match = content.match(yearRegex) && content.match(yearRegex).some(m => m >= currentYear);
-    if(match) {
-      console.log("up-to-date");
-      return ;
+  const matches = [];
+  for (let content of footerContents) {    
+    const yearMatch = content.match(yearRegex);
+    
+    // A string matching our regex was found
+    if(yearMatch) {
+      matches.push(yearMatch);
+      if(yearMatch.some(m => m >= currentYear)) { 
+        console.log("up-to-date");
+        return; 
+      }
     }
   }
-  writeStream.write(`"${window.location.href}",`);
+
+  // Either year wasn't found or outdated
+  writeStream.write(JSON.stringify({url: window.location.href, years: [... new Set(matches.flat())]}) + ',');
   console.log("outdated");
 };
 
