@@ -10,7 +10,7 @@ const checkFooterYear = async (window) => {
   for (let content of footerContents) {
     const match = content.match(yearRegex);
     if(match) {
-      console.log(`${match.some(m => m == currentYear) ? "Up-to-date" : "Not up-to-date"}`)
+      console.log(`${match.some(m => m >= currentYear) ? "Up-to-date" : "outdated"}`)
       break;
     }
   }
