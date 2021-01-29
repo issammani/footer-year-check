@@ -72,7 +72,12 @@ class Crawler {
   async fetch(url) {
     try { 
       console.log(`[+] Fetching ${url}`);
-      return await axios.get(url);
+      const response = await axios.get(url);
+      if(response.headers['content-type'].includes('text/html')){
+        return response;
+      }else {
+        throw Error('Response is not an html file');
+      }
     }catch(err) {
       error(`[-] Error fetching ${url}`);
     } 
