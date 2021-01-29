@@ -9,7 +9,10 @@ class Crawler {
     this.queue = new Set(options.startUrls);
 
     // beforeRun (if it exists) should be run once before .run()
-    this.beforeRun = options.beforeRun && options.beforeRun.bind(this)();
+    this.beforeRun = options.beforeRun;
+
+    // Store beforeRun return value
+    this.beforeRunReturn = null;
 
     // Callback to call when response is received
     this.callback = options.callback ? options.callback.bind(this) : console.log;
@@ -19,7 +22,7 @@ class Crawler {
   }
 
   init() {
-    this.beforeRun && this.beforeRun.bind(this).call();
+    this.beforeRunReturn = this.beforeRun ? this.beforeRun.bind(this).call() : null;
   }
 
   async run() {
@@ -29,7 +32,7 @@ class Crawler {
         const dom = await this.parseHTML(url,response);
         const externalLinks = await this.getAllExternalLinks(dom.window);
         this.addUrls(externalLinks);
-        await this.callback(dom.window);
+        await this.callback(dom.window, this.beforeRunReturn);
       } catch(err) {
         console.warn(`${err.message}`);
       }

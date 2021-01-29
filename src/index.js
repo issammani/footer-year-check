@@ -6,8 +6,8 @@ const startUrls = require('./seed-urls.json').urls;
 
 const crawler = new Crawler({
   startUrls, 
-  callback: checkFooterYear,
-  beforeRun: () => console.log('lala')
+  callback: (b, c) => console.log(c),
+  beforeRun: () => 'boo'
 });
 
 crawler.run();
