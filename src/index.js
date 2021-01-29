@@ -13,7 +13,8 @@ const startUrls = [
 
 const crawler = new Crawler({
   startUrls, 
-  callback: checkFooterYear
+  callback: checkFooterYear,
+  beforeRun: () => console.log('lala')
 });
 
 crawler.run();

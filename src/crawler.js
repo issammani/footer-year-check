@@ -8,8 +8,18 @@ class Crawler {
     // Keep track of urls
     this.queue = new Set(options.startUrls);
 
+    // beforeRun (if it exists) should be run once before .run()
+    this.beforeRun = options.beforeRun && options.beforeRun.bind(this)();
+
     // Callback to call when response is received
     this.callback = options.callback ? options.callback.bind(this) : console.log;
+
+    // Call init
+    this.init();
+  }
+
+  init() {
+    this.beforeRun && this.beforeRun.bind(this).call();
   }
 
   async run() {
