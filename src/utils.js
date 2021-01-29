@@ -35,7 +35,7 @@ const checkFooterYear = async (window, writeStream) => {
   // const copyrightRegex = /(?:©|(?:\(c\))|(?:&copy;))/;
   // const footerYearRegex = new RegExp(`(?=.*${yearRegex.source})(?=.*${copyrightRegex.source}).+`, `im`);
   const footerContents = await getFooterInnerText(window);
-  const matches = [];
+  let matches = [];
   for (let content of footerContents) {    
     const yearMatch = content.match(yearRegex);
     
@@ -49,9 +49,15 @@ const checkFooterYear = async (window, writeStream) => {
     }
   }
 
-  // Either year wasn't found or outdated
-  writeStream.write(',' + JSON.stringify({url: window.location.href, years: [... new Set(matches.flat())]}));
-  console.log("outdated");
+
+  matches = [... new Set(matches.flat())];
+  if(!matches.length) {
+    // Footer year wasn't extracted !
+    console.log("Footer year not found !");
+  } else {
+    writeStream.write(',' + JSON.stringify({url: window.location.href, years: [... new Set(matches.flat())]}));
+    console.log("outdated");
+  }
 };
 
 const getFooterInnerText = async (window) => {
