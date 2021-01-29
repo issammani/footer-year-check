@@ -1,6 +1,9 @@
+const fs = require('fs');
+const path = require('path');
 const axios = require('axios');
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
+const {generateHash} = require('./utils');
 
 class Crawler {
 
@@ -49,13 +52,20 @@ class Crawler {
       this.removeUrl(url);
     }
 
-    this.end();
+    await this.end();
   }
 
-  end() {
+  async end() {
     // Call afterRun 
     this.afterRun(this.beforeRunReturn);
 
+    console.log('Caching remaining urls in queue...');
+    // Create cache folder if it doesn't exist already
+    const cacheDir = `${path.resolve()}/cache`;
+    fs.mkdirSync(cacheDir, { recursive: true });
+    // Cache urls in queue for next run
+    fs.writeFileSync(`${cacheDir}/cached-queue-${generateHash()}.json`,JSON.stringify({urls: [...this.queue]}), { encoding: "utf8" });
+    console.log('Caching done !');
   }
 
   async fetch(url) {
