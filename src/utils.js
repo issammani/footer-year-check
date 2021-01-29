@@ -1,6 +1,7 @@
 const fs = require("fs");
 const path = require('path');
 const crypto = require('crypto');
+const {success, info, warn, error} = require('./log');
 
 // Store value of current year
 const currentYear = new Date().getFullYear();
@@ -43,7 +44,7 @@ const checkFooterYear = async (window, writeStream) => {
     if(yearMatch) {
       matches.push(yearMatch);
       if(yearMatch.some(m => m >= currentYear)) { 
-        console.log("up-to-date");
+        info("Footer year is up-to-date");
         return; 
       }
     }
@@ -53,10 +54,10 @@ const checkFooterYear = async (window, writeStream) => {
   matches = [... new Set(matches.flat())];
   if(!matches.length) {
     // Footer year wasn't extracted !
-    console.log("Footer year not found !");
+    warn("Footer year not found !");
   } else {
     writeStream.write(',' + JSON.stringify({url: window.location.href, years: [... new Set(matches.flat())]}));
-    console.log("outdated");
+    warn("Footer year is outdated");
   }
 };
 

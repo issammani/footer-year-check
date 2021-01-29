@@ -4,6 +4,7 @@ const axios = require('axios');
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const {generateHash} = require('./utils');
+const {success, info, warn, error} = require('./log');
 
 class Crawler {
 
@@ -31,7 +32,7 @@ class Crawler {
     this.beforeRunReturn = this.beforeRun ? this.beforeRun.bind(this).call() : null;
     // Detect SIGINT and call .afterRun
     process.on("SIGINT", () => {
-      console.log('\nSIGINT detected');
+      warn('\nSIGINT detected');
       this.end();
       process.exit();
     });
@@ -59,13 +60,13 @@ class Crawler {
     // Call afterRun 
     this.afterRun(this.beforeRunReturn);
 
-    console.log('Caching remaining urls in queue...');
+    info('Caching remaining urls in queue...');
     // Create cache folder if it doesn't exist already
     const cacheDir = `${path.resolve()}/cache`;
     fs.mkdirSync(cacheDir, { recursive: true });
     // Cache urls in queue for next run
     fs.writeFileSync(`${cacheDir}/cached-queue-${generateHash()}.json`,JSON.stringify({urls: [...this.queue]}), { encoding: "utf8" });
-    console.log('Caching done !');
+    info('Caching done !');
   }
 
   async fetch(url) {
@@ -73,7 +74,7 @@ class Crawler {
       console.log(`[+] Fetching ${url}`);
       return await axios.get(url);
     }catch(err) {
-      console.warn(`[-] Error fetching ${url}`);
+      error(`[-] Error fetching ${url}`);
     } 
   }
 
@@ -82,7 +83,7 @@ class Crawler {
       console.log(`[+] Parsing response from ${url}`);
       return await new JSDOM(response.data, {url});
     }catch(err) {
-      console.warn(`[-] Error parsing response from ${url}`);
+      error(`[-] Error parsing response from ${url}`);
     } 
   }
 
@@ -102,7 +103,7 @@ class Crawler {
   // Add url array to queue
   addUrls(urls) {
     urls.forEach(this.addUrl.bind(this));
-    console.log(`Added ${urls.length} links to queue`);
+    info(`Added ${urls.length} links to queue`);
   }
 
   // Remove url from queue
