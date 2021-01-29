@@ -17,12 +17,21 @@ class Crawler {
     // Callback to call when response is received
     this.callback = options.callback ? options.callback.bind(this) : console.log;
 
+    // afterRun (if it exists) should be run once after .run() or after SIGINT occurs
+    this.afterRun = options.afterRun ? options.afterRun.bind(this) : null;
+
     // Call init
     this.init();
   }
 
   init() {
     this.beforeRunReturn = this.beforeRun ? this.beforeRun.bind(this).call() : null;
+    // Detect SIGINT and call .afterRun
+    process.on("SIGINT", () => {
+      console.log('\nSIGINT detected');
+      this.afterRun(this.beforeRunReturn);
+      process.exit();
+    });
   }
 
   async run() {

@@ -7,7 +7,8 @@ const startUrls = require('./seed-urls.json').urls;
 const crawler = new Crawler({
   startUrls, 
   callback: checkFooterYear,
-  beforeRun: createWriteFileStream
+  beforeRun: createWriteFileStream,
+  afterRun: () => {console.log('Saving changes to file...'); console.log('All done');}
 });
 
 crawler.run();
