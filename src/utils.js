@@ -5,14 +5,13 @@ const crypto = require('crypto');
 // Store value of current year
 const currentYear = new Date().getFullYear();
 
+// Generate random 10 char string
+const generateHash = () => crypto.randomBytes(10).toString('hex');
 
 // Create new write stream
 const createWriteStream = (prefix='footer-check', outDir='store') => {
-  // Create a random hash 
-  const hash = crypto.randomBytes(10).toString('hex');
-
   // Create filename (with absoulte path)
-  const filename = `${path.resolve(outDir)}/${prefix}-${hash}.json`;
+  const filename = `${path.resolve(outDir)}/${prefix}-${generateHash()}.json`;
 
   // Kind of hacky but works for our use case
   const writeStream = fs.createWriteStream(filename,{flags: "w", encoding: "utf8"});
@@ -61,4 +60,4 @@ const getFooterInnerText = async (window) => {
     .map(footer => footer.textContent.replace(/\s/g,''));
 };
 
-module.exports = {checkFooterYear, createWriteStream, closeWriteStream};
+module.exports = {checkFooterYear, createWriteStream, closeWriteStream, generateHash};
