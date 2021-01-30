@@ -3,4 +3,5 @@ node_modules/
 ignore-*
 todos
 store
-cache
+cache/*
+!cache/cached-queue-example.json
