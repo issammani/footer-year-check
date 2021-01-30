@@ -5,6 +5,7 @@ const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const {generateHash} = require('./utils');
 const {success, info, warn, error} = require('./log');
+const { DH_CHECK_P_NOT_SAFE_PRIME } = require('constants');
 
 class Crawler {
 
@@ -67,7 +68,7 @@ class Crawler {
 
     info('Caching remaining urls in queue...');
     // Create cache folder if it doesn't exist already
-    const cacheDir = `${path.resolve()}/cache`;
+    const cacheDir = `${path.join(__dirname, '/../cache/')}`;
     fs.mkdirSync(cacheDir, { recursive: true });
     // Cache urls in queue for next run
     fs.writeFileSync(`${cacheDir}/cached-queue-${generateHash()}.json`,JSON.stringify({urls: [...this.queue]}), { encoding: "utf8" });
@@ -110,13 +111,17 @@ class Crawler {
   // and match cached-queue-{hash}
   getCache() {
     // Get cache dir
-    const cache = fs.readdirSync(`${path.resolve('cache')}`);
+    const cacheDir = `${path.join(__dirname, '/../cache/')}`;
+    let cacheFiles = fs.readdirSync(cacheDir);
+
     // Get latest cache file
-    cache.lengh > 0 && cache
-      .filter(file => /cached-queue-.*\.json/.test(file))
-      .map(file => `${path.resolve('cache', file)}`)
-      .reduce((prev, curr) => fs.statSync(prev).ctime > fs.statSync(prev).ctime ? prev : curr);
-    return cache.length >= 1 ? require(`${path.resolve('cache', cache[0])}`).urls : null ;
+    if(cacheFiles.length > 0) {
+      cacheFiles = cacheFiles
+        .filter(file => /cached-queue-.*\.json/.test(file))
+        .map(file => `${path.resolve(cacheDir, file)}`)
+        .reduce((prev, curr) => fs.statSync(prev).ctime > fs.statSync(prev).ctime ? prev : curr);
+    }
+    return cacheFiles.length >= 1 ? require(cacheFiles).urls : null ;
   }
 
   // Add url to queue

@@ -10,7 +10,14 @@
     "type": "git",
     "url": "https://github.com/issammani/footer-year-check.git"
   },
-  "keywords": ["crawler", "copyright year", "copyright", "year", "footer","website"],
+  "keywords": [
+    "crawler",
+    "copyright year",
+    "copyright",
+    "year",
+    "footer",
+    "website"
+  ],
   "author": "Issam Mani <issamouu69@gmail.com>",
   "license": "MIT",
   "dependencies": {
