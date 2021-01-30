@@ -5,7 +5,6 @@ const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const {generateHash} = require('./utils');
 const {success, info, warn, error} = require('./log');
-const { SSL_OP_TLS_BLOCK_PADDING_BUG } = require('constants');
 
 class Crawler {
 
