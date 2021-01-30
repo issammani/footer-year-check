@@ -1,6 +1,6 @@
 {
   "name": "footer-year-check",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A crawler that crawls (no surprise there) websites and checks wether the copyright year is up-to-date or not. #OCD",
   "main": "./index.js",
   "scripts": {

@@ -43,6 +43,10 @@ timeout --signal=SIGINT 1h npm start # Run for one hour
 
 * 1.0.0
     * Initial release
+* 1.0.1
+    * Fix cache path problem
+    * Fix output dir not found error
+    * Update readme
 
 
 ## Meta
