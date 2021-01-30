@@ -11,9 +11,15 @@ const generateHash = () => crypto.randomBytes(10).toString('hex');
 
 // Create new write stream
 const createWriteStream = (prefix='footer-check', outDir='store') => {
-  // Create filename (with absoulte path)
-  const filename = `${path.resolve(outDir)}/${prefix}-${generateHash()}.json`;
+  // Output directory name
+  const _output = path.resolve(outDir);
 
+  // Make directory if it doesn't exist already
+  fs.mkdirSync(_output, { recursive: true });
+
+  // Create filename (with absoulte path)
+  const filename = `${_output}/${prefix}-${generateHash()}.json`;
+  
   // Kind of hacky but works for our use case
   const writeStream = fs.createWriteStream(filename,{flags: "w", encoding: "utf8"});
   // Begin JSON Object
