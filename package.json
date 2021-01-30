@@ -2,9 +2,9 @@
   "name": "footer-year-check",
   "version": "1.0.0",
   "description": "A crawler that crawls (no surprise there) websites and checks wether the copyright year is up-to-date or not. #OCD",
-  "main": "src/index.js",
+  "main": "./index.js",
   "scripts": {
-    "start": "node src/index.js"
+    "start": "node index.js"
   },
   "keywords": ["crawler", "copyright year", "copyright", "year", "footer","website"],
   "author": "Issam Mani <issamouu69@gmail.com>",
