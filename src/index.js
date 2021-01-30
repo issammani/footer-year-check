@@ -11,4 +11,5 @@ const crawler = new Crawler({
   afterRun: closeWriteStream,
 });
 
-crawler.run();
+
+module.exports = {crawler};
