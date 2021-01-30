@@ -5,25 +5,14 @@ A crawler that crawls (no surprise there) websites and checks wether the copyrig
 
 ## Installation
 
-To use this tool on you local machine just follow these steps:
-
-1. Clone the repo
-   ```sh
-   git clone https://github.com/issammani/footer-year-check.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Start the script
-   ```sh
-   npm start
-   ```
-
+```sh
+npm i footer-year-check
+```
 
 ## Usage example
 The script doesn't do much aside from fetching, parsing and writing to files.
 First you need to get a crawler instance:
+
 ```js
 const {crawler} = require('footer-year-check');
 ```
