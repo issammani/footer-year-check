@@ -41,19 +41,15 @@ timeout --signal=SIGINT 1h npm start # Run for one hour
 
 ## Release History
 
-* 1.0.0
-    * Initial release
-* 1.0.1
-    * Fix cache path problem
-    * Fix output dir not found error
-    * Update readme
-
+[CHANGELOG](CHANGELOG.md)
 
 ## Meta
 
 Issam Mani – [@issam_mn](https://twitter.com/issam_mn) – maniissam.mi@gmail.com
 
-Distributed under the MIT license. See ``LICENSE`` for more information.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
+Distributed under the MIT license. See [LICENSE](./LICENSE) for more information.
 
 ## Contributing
 
