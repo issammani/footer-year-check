@@ -5,6 +5,7 @@ const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const {generateHash} = require('./utils');
 const {success, info, warn, error} = require('./log');
+const { SSL_OP_TLS_BLOCK_PADDING_BUG } = require('constants');
 
 class Crawler {
 
@@ -29,7 +30,12 @@ class Crawler {
   }
 
   init() {
+    // Add cached urls to queue
+    const cache = this.getCache();
+    cache && this.addUrls(this.getCache());
+
     this.beforeRunReturn = this.beforeRun ? this.beforeRun.bind(this).call() : null;
+    
     // Detect SIGINT and call .afterRun
     process.on("SIGINT", () => {
       warn('\nSIGINT detected');
@@ -98,7 +104,21 @@ class Crawler {
       .map(anchor => anchor.href)
       .filter(href => /^https?:\/\//i.test(href) && !href.includes(window.location.hostname));
     return anchors;
-  };
+  }
+
+  // Return cached urls if they exist
+  // By default all cache files are located in cache dir
+  // and match cached-queue-{hash}
+  getCache() {
+    // Get cache dir
+    const cache = fs.readdirSync(`${path.resolve('cache')}`);
+    // Get latest cache file
+    cache.lengh > 0 && cache
+      .filter(file => /cached-queue-.*\.json/.test(file))
+      .map(file => `${path.resolve('cache', file)}`)
+      .reduce((prev, curr) => fs.statSync(prev).ctime > fs.statSync(prev).ctime ? prev : curr);
+    return cache.length >= 1 ? require(`${path.resolve('cache', cache[0])}`).urls : null ;
+  }
 
   // Add url to queue
   addUrl(url) {
